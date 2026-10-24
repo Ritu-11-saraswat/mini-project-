@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CartoonCare AI – Prototype</title>
+<style>
+:root{--bg:#f4f7fd;--card:#fff;--tx:#1e2a44;--mu:#5b6785;--ac:#4f7cff;--ac2:#ff8a5b;--ok:#1f9d6b;--bad:#d64550;--bd:#e0e6f2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111827;--card:#1b2436;--tx:#eef2fb;--mu:#a5b0c8;--ac:#7b9dff;--ac2:#ff9d75;--ok:#4cc794;--bad:#ff7a85;--bd:#2c3752}}
+:root[data-theme="dark"]{--bg:#111827;--card:#1b2436;--tx:#eef2fb;--mu:#a5b0c8;--ac:#7b9dff;--ac2:#ff9d75;--ok:#4cc794;--bad:#ff7a85;--bd:#2c3752}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Nunito","Segoe UI",system-ui,sans-serif;line-height:1.5}
+.hero{background:linear-gradient(120deg,#4f7cff,#8a5bff 60%,#ff8a5b);color:#fff;padding:26px 16px;text-align:center}
+.hero h1{margin:0;font-size:2rem}.hero p{margin:6px 0 12px;opacity:.95}
+.chip{display:inline-block;margin:3px;padding:4px 12px;border-radius:99px;background:rgba(255,255,255,.22);font-size:.8rem;font-weight:700}
+.wrap{max-width:1060px;margin:0 auto;padding:18px 16px 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px}
+label{display:block;font-weight:700;font-size:.85rem;margin:12px 0 4px;color:var(--mu)}
+input,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:10px 16px;font-weight:700;background:var(--ac);color:#fff}
+button.alt{background:var(--bg);color:var(--tx);border:1px solid var(--bd)}
+button:disabled{opacity:.4;cursor:default}
+.go{width:100%;margin-top:16px;background:var(--ac2);color:#1b1b1b}
+.steps{list-style:none;padding:0;margin:14px 0 0;font-size:.85rem}
+.steps li{padding:3px 0;color:var(--mu)}.steps li.on{color:var(--tx);font-weight:700}.steps li.done{color:var(--ok)}
+.book{position:relative;overflow:hidden}.book svg{width:100%;height:auto;border-radius:12px;display:block;animation:fi .5s}
+@keyframes fi{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.txt{font-size:1.12rem;min-height:84px;margin:12px 0 6px;animation:fi .5s}
+.fact{font-size:.9rem;color:var(--mu);margin:0 0 10px}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dots{display:flex;gap:6px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--bd)}.dots i.on{background:var(--ac)}
+.empty{color:var(--mu);text-align:center;padding:60px 10px}
+.chk,.tips{list-style:none;padding:0;margin:8px 0 12px;font-size:.92rem}.chk li,.tips li{padding:4px 0}
+.tips li::before{content:"💛 "}
+.p{color:var(--ok)}.f{color:var(--bad)}
+.badge{display:inline-block;padding:4px 10px;border-radius:99px;font-size:.8rem;font-weight:700;background:var(--bd)}
+.badge.ok{background:var(--ok);color:#fff}
+.faces button{font-size:1.6rem;padding:6px 10px;background:var(--bg);border:2px solid var(--bd);margin-right:4px}
+.faces button.sel{border-color:var(--ac)}
+.cf span{position:absolute;top:-30px;font-size:1.4rem;animation:fall 3s linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(520px) rotate(300deg);opacity:0}}
+</style></head><body>
+<div class="hero"><h1>📚 CartoonCare AI</h1><p>A storybook for the child, a guide for the parent, and a brave day they do together.</p>
+<span class="chip">Personalized</span><span class="chip">Parent-inclusive</span><span class="chip">Clinician-reviewed</span></div>
+<div class="wrap">
+<div class="grid">
+ <div class="card">
+  <b>1 · Clinical input</b>
+  <label for="nm">Child’s first name</label><input id="nm" value="Aarav" maxlength="20">
+  <label for="ag">Age group</label>
+  <select id="ag"><option value="0">3–5 years</option><option value="1" selected>6–8 years</option><option value="2">9–12 years</option><option value="3">12–18 years (teen)</option></select>
+  <label for="pa">Who comes along?</label>
+  <select id="pa"><option>Mama</option><option>Papa</option><option>Grandma</option><option>Grandpa</option></select>
+  <label for="pr">Procedure / diagnosis</label>
+  <select id="pr"><option value="blood">Blood test</option><option value="xray">X-ray</option><option value="mri">MRI scan</option><option value="surgery">Surgery (anesthesia)</option><option value="asthma">Asthma inhaler</option></select>
+  <label for="he">Comfort buddy</label>
+  <select id="he"><option>🐰</option><option>🐻</option><option>🦊</option><option>🐼</option><option>🦁</option></select>
+  <button class="go" id="gen">✨ Generate storybook</button>
+  <ol class="steps" id="steps"></ol>
+ </div>
+ <div class="card book" id="out"><div class="empty">Your storybook will appear here.<br>Fill in the details and press Generate.</div></div>
+</div>
+<div class="grid">
+ <div class="card" id="gd" style="display:none"><b>👪 Parent guide</b><p class="fact" id="gs"></p><ul class="tips" id="tp"></ul></div>
+ <div class="card" id="cm" style="display:none"></div>
+ <div class="card" id="rev" style="display:none">
+  <b>🛡 Safety &amp; clinical review</b>
+  <ul class="chk" id="chk"></ul>
+  <button id="ok">✔ Clinician sign-off</button> <span class="badge" id="bd">Awaiting review</span>
+ </div>
+</div></div>
+<script>
+const PR={
+blood:{ic:"💉",a:["The nurse puts a tiny sticker on {n}’s arm. Then, a small pinch!","The nurse cleans a spot on {n}’s arm. A thin needle collects a little blood in a small tube."],pa:["{p} sits close and holds {n}’s hand.","{p} gives a big squeeze and a hug."],b:["It is quick. {n} takes a big breath and looks at {h}.","It takes less than a minute. Slow belly breaths and looking away can make the pinch feel smaller."],f:"Blood tests help doctors learn how your body is doing.",g:"Let your child look away, and breathe slowly together. Choosing the arm or the sticker gives a sense of control."},
+xray:{ic:"📷",a:["A big camera takes a picture of {n}’s bones. Click!","A friendly machine takes a picture of the inside of {n}’s body. It does not hurt."],pa:["{p} waits right beside the door and waves.","{p} gives a thumbs-up the whole time."],b:["{n} stands still like a statue. Easy!","Staying still for a few seconds keeps the picture clear. {n} will not feel anything."],f:"X-rays use invisible light to see your bones.",g:"Practice the “statue game” at home so staying still feels like play."},
+mri:{ic:"🌀",a:["{n} lies on a cozy bed that slides into a big tunnel.","{n} lies on a bed that slides into a wide, tunnel-shaped scanner that takes pictures."],pa:["{p} stays close by.","{p} is nearby, and a helper talks to {n} the whole time."],b:["The machine goes boom-boom like a drum. {n} wears headphones.","The scanner makes loud knocking sounds, so {n} wears headphones and stays still."],f:"An MRI uses magnets, not needles, to make pictures.",g:"Practice lying still at home and play drum sounds so the noise feels familiar."},
+surgery:{ic:"🌙",a:["A kind doctor helps {n} fall into a deep, sleepy sleep.","The anesthesia doctor gives {n} sleepy medicine, so {n} sleeps and feels nothing during the operation."],pa:["{p} walks with {n} and gives a goodnight kiss.","{p} is waiting close by when {n} wakes up."],b:["While {n} sleeps, the doctors do their special work. Then {n} wakes up.","The surgeons work while {n} sleeps. A nurse is right there when {n} wakes up and the sleepy feeling fades."],f:"A doctor watches over you carefully the whole time you sleep.",g:"Follow the care team’s eating and drinking instructions exactly, and pack a favorite toy."},
+asthma:{ic:"💨",a:["{n} breathes in a puff of medicine from a little inhaler.","{n} uses an inhaler with a spacer to breathe medicine straight to the lungs."],pa:["{p} helps hold the inhaler steady.","{p} cheers for every puff."],b:["Puff, breathe in, count to ten. Ahh, breathing feels easier!","Breathe out, press once, breathe in slowly and hold for ten seconds. Breathing feels easier soon."],f:"Inhalers carry medicine right to your airways.",g:"Practice the steps together and praise every try. Make it a routine, not a fight."}};
+const GEN=["Read this story together a day or two before, in a calm moment.","Use honest words. Say “it may pinch”, never “it won’t hurt”.","Invite questions and offer small choices, such as which sticker.","Stay calm: children copy your breathing and your face.","Ask the hospital what its policy is on parents staying with the child."];
+const PAR={Mama:{f:1,c:"#3b2a20"},Papa:{f:0,c:"#3b2a20"},Grandma:{f:1,c:"#c4c4c4"},Grandpa:{f:0,c:"#c4c4c4"}};
+const SKY=["#c9d8ff","#bfe3ff","#ffe0c2","#d9ccff","#c8f0d8","#ffd6e0"],FACES=["😰","😟","😐","🙂","😄"];
+const S={pages:[],i:0,b:0,a:0};
+const $=id=>document.getElementById(id);
+function story(n,age,key,h,p){
+ const q=PR[key],t=age==0?0:1,r=s=>s.replaceAll("{n}",n).replaceAll("{p}",p).replaceAll("{h}",h),o=age>=2,tn=age==3,pp=i=>tn?["{p} is nearby if {n} wants support.","{p} is there afterwards, whenever {n} is ready."][i]:q.pa[i];
+ return [
+ {t:tn?`${n}’s Hospital Guide`:`${n}’s Brave Day`,e:"📖",f:tn?`What to expect, for you and ${p}.`:`A story for ${n} and ${p}, with ${h}.`},
+ {t:tn?`${n} is heading to the hospital with ${p} today. The care team explains every step, and ${n} has a say in decisions.`:`${n}, ${p} and ${h} are going to the hospital today. It is a place where helpers look after children. ${p} holds your hand all the way.`,e:"🏥",f:o?"Hospitals have many people whose job is to help you feel better.":""},
+ {t:tn?`The doctor introduces themselves and explains the plan. ${n} can ask anything, even privately, and ${p} can join if ${n} wants.`:`Dr. Sunny smiles and says hello. ${n} can ask any question, and ${p} can ask too.`,e:"🧑‍⚕️",f:o?"Doctors and nurses explain what they are doing before they start.":""},
+ {t:r(q.a[t]+" "+pp(0)),e:q.ic,f:o?q.f:""},
+ {t:r(q.b[t]+" "+pp(1)),e:q.ic,f:""},
+ {t:tn?`${n} handled it really well. ${p} is proud, and it is time to rest at home.`:`${n} was so brave! ${p} gives the biggest hug, then a shiny star sticker, and then home together.`,e:"⭐",f:""}];}
+function person(x,y,s,f,hair,body,skin,r){
+ const lo=f&&r>34?`<ellipse cy="16" rx="${r+6}" ry="${r+12}" fill="${hair}"/>`:"";
+ return `<g transform="translate(${x},${y}) scale(${s})">${lo}<rect x="-${r*.8}" y="${r*.9}" width="${r*1.6}" height="${r*1.8}" rx="20" fill="${body}"/><circle r="${r}" fill="${skin}"/><path d="M-${r+1} -2Q0 -${r*1.7} ${r+1} -2Q0 -${r*.8} -${r+1} -2" fill="${hair}"/><circle cx="-${r*.35}" cy="3" r="4" fill="#222"/><circle cx="${r*.35}" cy="3" r="4" fill="#222"/><path d="M-${r*.35} 17Q0 30 ${r*.35} 17" stroke="#222" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;}
+function scene(pg,i,h,p){
+ const P=PAR[p],ex=i==0?`<text x="300" y="130" font-size="78" text-anchor="middle">${pg.e}</text><text x="345" y="70" font-size="30">✨</text>`:i==1?`<rect x="240" y="75" width="130" height="130" rx="10" fill="#fff"/><rect x="292" y="95" width="26" height="60" fill="#e5484d"/><rect x="275" y="112" width="60" height="26" fill="#e5484d"/><rect x="292" y="165" width="26" height="40" fill="#8aa4d6"/>`:`<text x="300" y="140" font-size="${i==5?66:80}" text-anchor="middle">${pg.e}</text>`+(i==5?`<text x="350" y="200" font-size="40" text-anchor="middle">🏠</text>`:"");
+ return `<svg viewBox="0 0 400 260" role="img" aria-label="Storybook page ${i+1}: child with parent"><rect width="400" height="260" fill="${SKY[i]}"/><circle cx="50" cy="40" r="22" fill="#ffd54a"/><ellipse cx="320" cy="40" rx="42" ry="14" fill="#fff" opacity=".8"/><rect y="205" width="400" height="55" fill="#8fd19e"/>${ex}`+
+ person(185,125,1,P.f,P.c,"#ff8a5b","#e6b88c",36)+person(98,S.age==3?150:155,S.age==3?.95:.8,0,"#3b2a20","#4f7cff","#f2c9a0",S.age==3?34:32)+
+ `<path d="M118 195Q135 205 152 195" stroke="#f2c9a0" stroke-width="9" fill="none" stroke-linecap="round"/><text x="30" y="245" font-size="40">${h}</text></svg>`;}
+function show(){
+ const pg=S.pages[S.i],L=S.pages.length-1;
+ $("out").innerHTML=scene(pg,S.i,$("he").value,$("pa").value)+`<p class="txt" id="tx"></p><p class="fact" id="fc"></p><div class="nav"><button class="alt" id="pv">←</button><button class="alt" id="rd" title="Read aloud">🔊</button><div class="dots">${S.pages.map((_,k)=>`<i class="${k==S.i?"on":""}"></i>`).join("")}</div><button id="nx">${S.i==L?"Restart":"Next →"}</button></div>`;
+ $("tx").textContent=pg.t;$("fc").textContent=pg.f?"💡 "+pg.f:"";
+ $("pv").disabled=S.i==0;
+ $("pv").onclick=()=>{S.i--;show()};
+ $("nx").onclick=()=>{S.i=S.i==L?0:S.i+1;show()};
+ $("rd").onclick=()=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(pg.t+" "+pg.f);u.rate=.9;speechSynthesis.speak(u)}catch(e){}};
+ if(S.i==L){S.seen=1;renderCM();const c=document.createElement("div");c.className="cf";c.innerHTML=Array.from({length:16},(_,k)=>`<span style="left:${k*6.2}%;animation-delay:${(k%5)*.25}s">${k%2?"⭐":"🎉"}</span>`).join("");$("out").appendChild(c)}}
+function guide(key){
+ $("gd").style.display="block";$("gs").textContent="For the grown-up who comes along:";
+ $("tp").innerHTML="";[PR[key].g,...(S.age==3?["Let your teen lead the questions, respect their privacy, and ask if they want you in the room."]:[]),...GEN].forEach(x=>{const li=document.createElement("li");li.textContent=x;$("tp").appendChild(li)});}
+function setC(w,k){S[w]=k;renderCM()}
+function renderCM(){
+ const row=w=>`<div class="faces">${FACES.map((f,k)=>`<button class="${S[w]==k+1?"sel":""}" onclick="setC('${w}',${k+1})" aria-label="feeling ${k+1} of 5">${f}</button>`).join("")}</div>`;
+ let h=`<b>😊 Comfort check</b><p class="fact">Before the story: how does ${"the child"} feel?</p>${row("b")}`;
+ if(S.seen)h+=`<p class="fact">After the story:</p>${row("a")}`;
+ if(S.b&&S.a)h+=`<p><b>${S.a>S.b?`Comfort went up by ${S.a-S.b} step${S.a-S.b>1?"s":""}! 🎉`:S.a==S.b?"Comfort stayed the same. Keep talking together. 💛":"Still worried. Talk about it together. 💛"}</b></p>`;
+ $("cm").innerHTML=h;$("cm").style.display="block";}
+function review(age,n){
+ const all=S.pages.map(p=>p.t+" "+p.f).join(" "),pn=$("pa").value;
+ const sents=all.split(/[.!?]+/).filter(s=>s.trim()),avg=all.split(/\s+/).length/sents.length,lim=[11,13,17,20][age];
+ const bad=/\b(die|dead|death|kill|scary|terrible|monster|cut)\b/i.test(all);
+ const C=[[!bad,"No frightening words (automated filter)"],[all.split(n).length-1>=5,"Personalized with the child’s name"],[all.split(pn).length-1>=4,`${pn} is part of the story from start to finish`],[avg<=lim,`Reading level fits age group (avg ${avg.toFixed(1)} words/sentence, limit ${lim})`],[/helper|nurse|doctor|hug/i.test(all),"Includes reassurance from the care team"],[S.pages.length==6,"Complete story arc with cover"]];
+ $("chk").innerHTML=C.map(c=>`<li class="${c[0]?"p":"f"}">${c[0]?"✔":"✘"} ${c[1]}</li>`).join("");
+ $("rev").style.display="block";$("ok").disabled=!C.every(c=>c[0]);
+ $("ok").onclick=()=>{$("bd").textContent="Approved · ready to deliver";$("bd").className="badge ok"};
+ $("bd").textContent="Awaiting review";$("bd").className="badge";}
+const ST=["1 · Clinical input captured","2 · NLP simplification","3 · Story generation (child + parent)","4 · Illustration generation","5 · Safety checks"];
+$("gen").onclick=async()=>{
+ const n=$("nm").value.trim();if(!n){$("nm").focus();return}
+ const age=+$("ag").value,key=$("pr").value,h=$("he").value,p=$("pa").value;
+ $("gen").disabled=true;["rev","cm","gd"].forEach(x=>$(x).style.display="none");
+ $("steps").innerHTML=ST.map(s=>`<li>${s}</li>`).join("");
+ for(const x of [...$("steps").children]){x.className="on";await new Promise(r=>setTimeout(r,380));x.className="done"}
+ S.age=age;S.pages=story(n,age,key,h,p);S.i=0;S.b=0;S.a=0;S.seen=0;show();guide(key);renderCM();review(age,n);$("gen").disabled=false;};
+</script></body></html>
